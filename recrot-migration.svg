@@ -1,0 +1,74 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="680" height="400" viewBox="0 0 680 400" font-family="system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif">
+<title>Recrot Firebase to NeonDB migration pipeline</title>
+<desc>Three stages: Firebase sources feed migration steps, which land in the new stack.</desc>
+<defs>
+<marker id="ag" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M2 1L8 5L2 9" fill="none" stroke="#8a8a8a" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></marker>
+<marker id="ac" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M2 1L8 5L2 9" fill="none" stroke="#800020" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></marker>
+</defs>
+
+<g font-size="12" fill="#6b6b6b">
+<text x="70" y="36">Firebase today</text>
+<text x="275" y="36">Migrate</text>
+<text x="480" y="36">New stack</text>
+</g>
+
+<g fill="#f7f7f5" stroke="#c4c4be" stroke-width="1">
+<rect x="70" y="60" width="130" height="56" rx="8"/>
+<rect x="70" y="140" width="130" height="56" rx="8"/>
+<rect x="70" y="220" width="130" height="56" rx="8"/>
+<rect x="70" y="300" width="130" height="56" rx="8" stroke-dasharray="4 3"/>
+<rect x="275" y="60" width="130" height="56" rx="8"/>
+<rect x="275" y="140" width="130" height="56" rx="8"/>
+<rect x="275" y="220" width="130" height="56" rx="8"/>
+<rect x="275" y="300" width="130" height="56" rx="8" stroke-dasharray="4 3"/>
+</g>
+<g fill="#f8ecef" stroke="#800020" stroke-width="1">
+<rect x="480" y="60" width="130" height="56" rx="8"/>
+<rect x="480" y="140" width="130" height="56" rx="8"/>
+<rect x="480" y="220" width="130" height="56" rx="8"/>
+</g>
+
+<g font-size="14" font-weight="500" fill="#1f1f1f" text-anchor="middle" dominant-baseline="central">
+<text x="135" y="79">Firestore</text>
+<text x="135" y="159">Firebase Auth</text>
+<text x="135" y="239">Storage</text>
+<text x="135" y="319">Unused data</text>
+<text x="340" y="79">Transform</text>
+<text x="340" y="159">Auth import</text>
+<text x="340" y="239">File copy</text>
+<text x="340" y="319">Dropped</text>
+</g>
+<g font-size="12" fill="#6b6b6b" text-anchor="middle" dominant-baseline="central">
+<text x="135" y="98">All collections</text>
+<text x="135" y="178">Users, sessions</text>
+<text x="135" y="258">Files and proofs</text>
+<text x="135" y="338">3 legacy sets</text>
+<text x="340" y="98">Fix types, enums</text>
+<text x="340" y="178">Re-issue logins</text>
+<text x="340" y="258">New bucket URLs</text>
+<text x="340" y="338">Not migrated</text>
+</g>
+
+<g font-size="14" font-weight="500" fill="#800020" text-anchor="middle" dominant-baseline="central">
+<text x="545" y="79">Neon Postgres</text>
+<text x="545" y="159">FastAPI auth</text>
+<text x="545" y="239">Object store</text>
+</g>
+<g font-size="12" fill="#a24a5d" text-anchor="middle" dominant-baseline="central">
+<text x="545" y="98">Enforced in DB</text>
+<text x="545" y="178">Admin web-only</text>
+<text x="545" y="258">S3 or R2</text>
+</g>
+
+<g fill="none" stroke="#8a8a8a" stroke-width="1.5" stroke-dasharray="6 4" stroke-linecap="round" marker-end="url(#ag)">
+<line x1="200" y1="88" x2="271" y2="88"><animate attributeName="stroke-dashoffset" from="0" to="-20" dur="0.9s" repeatCount="indefinite"/></line>
+<line x1="200" y1="168" x2="271" y2="168"><animate attributeName="stroke-dashoffset" from="0" to="-20" dur="0.9s" repeatCount="indefinite"/></line>
+<line x1="200" y1="248" x2="271" y2="248"><animate attributeName="stroke-dashoffset" from="0" to="-20" dur="0.9s" repeatCount="indefinite"/></line>
+<line x1="200" y1="328" x2="271" y2="328" opacity="0.45"><animate attributeName="stroke-dashoffset" from="0" to="-20" dur="1.8s" repeatCount="indefinite"/></line>
+</g>
+<g fill="none" stroke="#800020" stroke-width="1.5" stroke-dasharray="6 4" stroke-linecap="round" marker-end="url(#ac)">
+<line x1="405" y1="88" x2="476" y2="88"><animate attributeName="stroke-dashoffset" from="0" to="-20" dur="0.9s" repeatCount="indefinite"/></line>
+<line x1="405" y1="168" x2="476" y2="168"><animate attributeName="stroke-dashoffset" from="0" to="-20" dur="0.9s" repeatCount="indefinite"/></line>
+<line x1="405" y1="248" x2="476" y2="248"><animate attributeName="stroke-dashoffset" from="0" to="-20" dur="0.9s" repeatCount="indefinite"/></line>
+</g>
+</svg>

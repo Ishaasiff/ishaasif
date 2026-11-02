@@ -61,7 +61,7 @@ export function AboutTabs() {
         role="tablist"
         aria-label="About Isha"
         onKeyDown={handleKeyDown}
-        className="flex flex-wrap gap-x-6 gap-y-2 border-b border-white/10"
+        className="flex flex-wrap gap-x-6 gap-y-2 border-b border-hairline"
       >
         {tabs.map((tab, index) => {
           const isActive = index === active;
@@ -104,7 +104,7 @@ export function AboutTabs() {
               id={`${baseId}-panel-${tab.id}`}
               role="tabpanel"
               aria-labelledby={`${baseId}-tab-${tab.id}`}
-              className={`col-start-1 row-start-1 space-y-4 font-body text-base leading-relaxed text-muted ${
+              className={`col-start-1 row-start-1 space-y-4 font-body text-[17px] leading-relaxed text-muted ${
                 isActive ? "animate-panel-in motion-reduce:animate-none" : "invisible"
               }`}
             >

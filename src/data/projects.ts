@@ -1,110 +1,210 @@
-export type ProjectImage = {
-  src: string;
-  width: number;
-  height: number;
-  alt: string;
+/** A single design decision, with the cost that came with it. */
+export type CaseStudyDecision = {
+  title: string;
+  body: string;
+  /** The downside accepted in exchange for the decision. Rendered as a callout. */
+  tradeoff?: string;
+};
+
+/** One section of a project case study. Sections render in array order. */
+export type CaseStudySection = {
+  id: string;
+  heading: string;
+  intro?: string;
+  paragraphs?: readonly string[];
+  decisions?: readonly CaseStudyDecision[];
+  /** A two-column "choice / why" table. */
+  stack?: readonly { tool: string; why: string }[];
+  /** Short titled notes, rendered in two columns. */
+  points?: readonly { label: string; body: string }[];
+  bullets?: readonly string[];
+};
+
+/** Long-form project write-up shown below the architecture diagram. */
+export type ProjectCaseStudy = {
+  /** Role, audience, stack: three at-a-glance facts. */
+  meta: readonly { label: string; value: string }[];
+  sections: readonly CaseStudySection[];
 };
 
 export type Project = {
-  id: string;
+  /** Used in the URL: /projects/<slug> */
+  slug: string;
   title: string;
-  paragraphs: string[];
-  purpose?: {
-    heading: string;
-    text: string;
-  };
-  images: ProjectImage[];
+  description: string;
+  /** Link to the deployed site. Leave empty until you have it; the button shows as disabled. */
+  liveUrl: string;
+  /** Optional deep-dive rendered under the project's diagram. */
+  caseStudy?: ProjectCaseStudy;
 };
 
-const img = (src: string, width: number, height: number, alt: string): ProjectImage => ({
-  src,
-  width,
-  height,
-  alt,
-});
-
-export const projects: Project[] = [
+export const projects: readonly Project[] = [
   {
-    id: "hospital-management",
-    title: "HOSPITAL MANAGEMENT SYSTEM (Appointment Booking)",
-    paragraphs: [
-      "This web-based system is developed to facilitate seamless appointment scheduling between patients and doctors. Patients can conveniently book appointments with their preferred healthcare providers at any time, ensuring accessibility and flexibility. Simultaneously, the system empowers doctors to efficiently manage their schedules by allowing them to accept or decline appointment requests based on their availability.",
-    ],
-    purpose: {
-      heading: "Project Purpose",
-      text: "The system enables patients to book appointments with doctors anytime and allows doctors to manage, accept, or decline requests based on their availability",
+    slug: "recrot",
+    title: "Recrot",
+    description: `Recrot is the backend for a tutoring marketplace that connects tutors with parents and companies with subscriptions, notifications, and admin oversight built in.`,
+    liveUrl: "https://recrot-backend-n2uu.vercel.app/docs",
+  },
+  {
+    slug: "workflow",
+    title: "Workflow",
+    description: `Workflow is a multi-tenant work management SaaS. Its purpose is to help organizations plan and track work through projects, tasks, teams, and reports, with role-based access control keeping each organization's data separate.`,
+    liveUrl: "https://workflow-frontend-xi.vercel.app",
+  },
+  {
+    slug: "innovative",
+    title: "Innovative Widget",
+    description: `A marketing website for "Innovative Widget," a digital agency.`,
+    liveUrl: "https://innovativewidgetsite.vercel.app/",
+  },
+  {
+    slug: "ai-study-assistant",
+    title: "AI-StudyAssistant",
+    description: `A multi-user AI study assistant built on FastAPI and LangChain. Students chat with an LLM tutor that can act on its own — when asked, it saves the explanation as a persistent note in Postgres, scoped to that user. Solo-built end to end: JWT auth, layered API, and a ReAct agent with database-writing tools.`,
+    liveUrl: "https://cognify-6xkd.vercel.app/docs",
+    caseStudy: {
+      meta: [
+        {
+          label: "Role",
+          value: "Solo developer — architecture, data model, REST API, authentication, LLM agent and tool integration.",
+        },
+        {
+          label: "Built for",
+          value: "Students who want the speed of a chatbot with the retention of notes.",
+        },
+        {
+          label: "Core stack",
+          value: "FastAPI, LangChain, PostgreSQL (Neon), Groq — API-first, no frontend in the repo.",
+        },
+      ],
+      sections: [
+        {
+          id: "overview",
+          heading: "What it is",
+          paragraphs: [
+            `An API-first study companion for students. You sign up, open a conversation, and ask about a topic. The assistant explains concepts in plain language, and when you say something like “save that as a note,” it writes the note to your account instead of just replying. Notes are then yours to list, read, edit, and delete.`,
+            `It closes the gap between “the AI explained it” and “I still have it next week.” Because it is API-first, a web or mobile client can sit on top of it without changing the backend.`,
+            `Everything on the server is mine: the FastAPI app, the layered structure (routes → controllers → models/core), JWT auth, the Postgres schema, the LangChain agent, and the tool that lets the model write to the database.`,
+          ],
+        },
+        {
+          id: "decisions",
+          heading: "Decisions and trade-offs",
+          intro:
+            "Six choices shaped the backend. Each one bought something specific — and each one has a cost I can name.",
+          decisions: [
+            {
+              title: "A tool-using agent instead of a plain chatbot",
+              body: "The chat endpoint runs a LangChain ReAct agent with two tools: a Calculator and a SaveNote tool. This was the core design decision — a normal chatbot can only talk about saving a note; an agent can decide to save it. The SaveNote tool is built per-request with a closure over the current user's ID and database session, so the model physically cannot write to another user's account.",
+              tradeoff:
+                "The model decides when to act, so behaviour is non-deterministic, and ReAct relies on the model emitting parseable Action: text. I mitigated that with handle_parsing_errors=True and max_iterations=5 to stop runaway loops. Native function calling would be more reliable, but ReAct keeps it model-agnostic and lets me swap providers freely.",
+            },
+            {
+              title: "Stateless chat with history rebuilt from the database",
+              body: "Rather than holding ConversationBufferMemory in process memory, I reload the message history from Postgres on every request and inject it into the prompt. The server can restart or scale horizontally without losing context, and conversations survive deploys.",
+              tradeoff:
+                "Prompt size grows with thread length, so long conversations get slower and more expensive. The next step is windowing or summarising older turns — I chose to ship correctness first and optimise later, since early usage is short sessions.",
+            },
+            {
+              title: "Multi-tenant isolation at the data layer",
+              body: "Every query filters on user_id — not just the route guards. Ownership is enforced in the controller, so a bug in a route cannot leak another user's notes. Models use UUID primary keys and ON DELETE CASCADE, so deleting a user cleans up their conversations, messages, and notes.",
+            },
+            {
+              title: "Connection handling tuned for serverless Postgres",
+              body: "The database is Neon, which drops idle connections aggressively. I configured pool_pre_ping, pool_recycle=300, and TCP keepalives so the API reconnects instead of throwing stale-connection errors on the first request after a quiet period. This was a real production failure mode, not a hypothetical.",
+            },
+            {
+              title: "Pragmatic schema management",
+              body: "Tables are created via SQLAlchemy's create_all rather than Alembic. It is the right call for a solo project at this stage — zero migration overhead while the schema is still moving.",
+              tradeoff:
+                "It is explicitly a “before scale” choice. Alembic is the first thing I would add once the schema stabilises.",
+            },
+            {
+              title: "Auth done simply",
+              body: "JWT bearer tokens with bcrypt-hashed passwords (with the 72-byte truncation handled explicitly). Stateless, no session store, and a standard OAuth2PasswordBearer flow so the Swagger UI is usable for testing immediately.",
+            },
+          ],
+        },
+        {
+          id: "stack",
+          heading: "Stack",
+          intro: "Deliberately small — nothing here exists for its own sake.",
+          stack: [
+            {
+              tool: "Python + FastAPI",
+              why: "Typed, fast to build, auto-generated OpenAPI docs — testing the API costs nothing.",
+            },
+            {
+              tool: "Pydantic / pydantic-settings",
+              why: "Request validation and typed environment config in one dependency.",
+            },
+            {
+              tool: "SQLAlchemy 2.0",
+              why: "Typed mapped_column models, relationships, cascade deletes.",
+            },
+            {
+              tool: "PostgreSQL (Neon)",
+              why: "Serverless Postgres — free tier, branching, SSL by default.",
+            },
+            {
+              tool: "LangChain",
+              why: "Agent and tool abstraction, provider-agnostic so the model isn't a lock-in.",
+            },
+            {
+              tool: "Groq (openai/gpt-oss-120b)",
+              why: "Very low-latency, low-cost inference — good enough for tutoring, fast enough to feel live.",
+            },
+            {
+              tool: "python-jose + bcrypt",
+              why: "Standard JWT signing and salted password hashing.",
+            },
+            {
+              tool: "Uvicorn",
+              why: "ASGI server.",
+            },
+          ],
+        },
+        {
+          id: "highlights",
+          heading: "Worth a closer look",
+          points: [
+            {
+              label: "Agentic tool use with real side effects",
+              body: "The interesting engineering isn't the chat — it's safely letting an LLM trigger a database write, scoped to one user, inside a request that must stay transactional.",
+            },
+            {
+              label: "Layered architecture",
+              body: "Transport (routes), business logic (controllers), infrastructure (core), and schema (models) are separated, so swapping the LLM provider or the database touches one folder.",
+            },
+            {
+              label: "Failure-mode thinking",
+              body: "The connection-pool tuning and the agent's iteration cap are both responses to things that actually break in production.",
+            },
+            {
+              label: "Configuration over hardcoding",
+              body: "Settings are externalised through pydantic-settings and a .env file, so environments differ by configuration rather than by code.",
+            },
+            {
+              label: "Roadmap and judgment",
+              body: "Being able to name what I would do next signals more than pretending the project is finished.",
+            },
+          ],
+        },
+        {
+          id: "next",
+          heading: "What's next",
+          intro:
+            "The project is intentionally unfinished. These are the next moves, in priority order.",
+          bullets: [
+            "Streaming responses, so answers feel live instead of arriving all at once.",
+            "Message summarisation or windowing to cap prompt size on long threads.",
+            "Alembic migrations before the schema starts changing under real data.",
+            "Per-user rate limiting on the chat endpoint.",
+            "A test suite covering the auth flow, note ownership, and the SaveNote tool.",
+            "Async or off-thread execution for the blocking LLM calls, which currently occupy worker threads under load.",
+          ],
+        },
+      ],
     },
-    images: [
-      img("/img3.png", 1897, 879, "Hospital management system screenshot 1"),
-      img("/img4.png", 1879, 775, "Hospital management system screenshot 2"),
-      img("/img5.png", 1894, 886, "Hospital management system screenshot 3"),
-      img("/img6.png", 1882, 867, "Hospital management system screenshot 4"),
-      img("/img7.png", 1894, 404, "Hospital management system screenshot 5"),
-      img("/img8.png", 1887, 860, "Hospital management system screenshot 6"),
-      img("/img9.png", 1873, 647, "Hospital management system screenshot 7"),
-      img("/img10.png", 1894, 885, "Hospital management system screenshot 8"),
-      img("/img11.png", 1915, 880, "Hospital management system screenshot 9"),
-      img("/img12.png", 1908, 886, "Hospital management system screenshot 10"),
-      img("/img13.png", 1890, 859, "Hospital management system screenshot 11"),
-    ],
-  },
-  {
-    id: "donor-os",
-    title: "DonorOS: Blood Donor Management",
-    paragraphs: [
-      "DonorOS is a Java-based blood donor management system developed to streamline the process of managing blood donors, recipients, and donation events. It allows users (admin or staff) to register donors, manage their records, search for eligible donors by blood type, and keep track of donations. The system ensures quick and reliable access to critical donor data during emergencies.",
-    ],
-    purpose: {
-      heading: "Project Purpose",
-      text: "The manual system of tracking donors through paper records or scattered files is inefficient and error-prone. DonorOS aims to replace such methods with a centralized, secure, and user-friendly digital system. It ensures that hospitals and blood banks can quickly find eligible donors, reducing response time in critical situations.",
-    },
-    images: [
-      img("/img14.png", 1048, 514, "DonorOS screenshot 1"),
-      img("/img15.png", 1042, 520, "DonorOS screenshot 2"),
-      img("/img16.png", 1042, 610, "DonorOS screenshot 3"),
-      img("/img17.png", 829, 535, "DonorOS screenshot 4"),
-      img("/img18.png", 1042, 568, "DonorOS screenshot 5"),
-      img("/img19.png", 1027, 597, "DonorOS screenshot 6"),
-      img("/img20.png", 1036, 532, "DonorOS screenshot 7"),
-      img("/img21.png", 1032, 595, "DonorOS screenshot 8"),
-      img("/img22.png", 1032, 603, "DonorOS screenshot 9"),
-      img("/img23.png", 1036, 558, "DonorOS screenshot 10"),
-    ],
-  },
-  {
-    id: "todo-list",
-    title: "TODO LIST WEB APP",
-    paragraphs: [
-      "A simple and fully responsive To-Do List application built using HTML, CSS, and JavaScript. It allows users to easily manage their daily tasks in an interactive way. User can add new tasks with ease, Mark tasks as completed using checkboxes, Remove completed tasks with a single click, Clear all tasks at once.",
-    ],
-    images: [img("/todoweb.png", 1182, 538, "To-Do list web app screenshot")],
-  },
-  {
-    id: "weather-report",
-    title: "WEATHER REPORT WEB APP",
-    paragraphs: [
-      "A simple weather web application that allows users to search for the current weather in any city. It uses the OpenWeatherMap API to fetch real-time weather data and displays temperature, and location information in a clean UI.",
-    ],
-    images: [img("/weatherrecord.png", 1183, 540, "Weather report web app screenshot")],
-  },
-  {
-    id: "travel-website",
-    title: "Travel Website",
-    paragraphs: [
-      "A sleek and interactive travel website designed with smooth navigation, real-time country search, and a visually captivating landing page. It blends modern aesthetics with functionality to deliver a seamless browsing experience.",
-    ],
-    purpose: {
-      heading: "Project Purpose",
-      text: "To simplify exploration by giving users an engaging platform where they can quickly search destinations, discover recommendations, and enjoy a user-friendly, stylish interface powered by dynamic JavaScript features.",
-    },
-    images: [
-      img("/img-43.png", 1909, 889, "Travel website screenshot 1"),
-      img("/img-44.png", 1890, 850, "Travel website screenshot 2"),
-      img("/img-45.png", 1920, 355, "Travel website screenshot 3"),
-      img("/img-46.png", 1872, 707, "Travel website screenshot 4"),
-      img("/img-47.png", 1885, 676, "Travel website screenshot 5"),
-      img("/img-48.png", 1879, 879, "Travel website screenshot 6"),
-      img("/img-49.png", 1906, 874, "Travel website screenshot 7"),
-    ],
   },
 ];

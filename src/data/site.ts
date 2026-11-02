@@ -1,7 +1,7 @@
 export const site = {
   name: "Isha Asif",
-  role: "Software Engineering Student | Web Developer | Designer",
-  headline: "Software Engineering Student",
+  role: "Software Engineering Student | Web Developer",
+  headline: "Isha Asif",
   location: "Karachi, Pakistan",
   email: "ishaasif439@gmail.com",
   links: {
@@ -21,7 +21,7 @@ export type NavLink = {
 export const navLinks: NavLink[] = [
   { label: "About", href: "#aboutus", id: "aboutus" },
   { label: "Services", href: "#services", id: "services" },
-  { label: "Projects", href: "#project", id: "project" },
+  { label: "Projects", href: "#projects", id: "projects" },
   { label: "Contact", href: "#contact", id: "contact" },
 ];
 

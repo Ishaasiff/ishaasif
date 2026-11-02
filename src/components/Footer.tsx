@@ -12,11 +12,11 @@ const quickLinks = [
 
 export function Footer() {
   return (
-    <footer className="min-h-[50vh] bg-brand">
+    <footer className="min-h-[50vh] bg-transparent">
       <div className="grid grid-cols-3 gap-x-10 px-[30px] pb-[3px] pt-[30px] max-[992px]:grid-cols-2 max-[992px]:gap-y-[30px] max-[600px]:grid-cols-1 max-[600px]:text-center">
         <Reveal>
           <div>
-            <h3 className="font-display font-bold text-cream">Isha Asif</h3>
+            <h3 className="font-heading text-[17px] font-bold text-cream">Isha Asif</h3>
             <p className="pt-2.5 font-body text-muted">
               Software Engineering student passionate about full stack development, cloud computing, and emerging
               technologies.
@@ -26,7 +26,7 @@ export function Footer() {
 
         <Reveal delay={100}>
           <div className="ml-24 text-cream max-[992px]:ml-0">
-            <h3 className="mb-2 text-cream">Quick links</h3>
+            <h3 className="font-heading mb-2 text-[17px] text-cream">Quick links</h3>
             <ul className="list-none font-body">
               {quickLinks.map((link) => (
                 <li key={link.href}>
@@ -44,7 +44,7 @@ export function Footer() {
 
         <Reveal delay={200}>
           <div className="text-cream">
-            <h3 className="mb-2 text-cream">Connect</h3>
+            <h3 className="font-heading mb-2 text-[17px] text-cream">Connect</h3>
             <ul className="list-none">
               <li className="grid grid-cols-[40px_40px_40px] max-[600px]:justify-center">
                 <a href={site.links.mailto} aria-label="Gmail" className="leading-10 text-muted transition-colors duration-300 hover:text-cream">

@@ -1,11 +1,15 @@
 @import "tailwindcss";
 
+@custom-variant dark (&:where(.dark, .dark *));
+@custom-variant light (&:where(.light, .light *));
+
 @theme {
   /* Fonts */
-  --font-display: var(--font-poppins), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-geist), ui-sans-serif, system-ui, sans-serif;
+  --font-heading: var(--font-space-grotesk), ui-sans-serif, system-ui, sans-serif;
   --font-body: var(--font-open-sans), ui-sans-serif, system-ui, sans-serif;
 
-  /* Palette: black surfaces, cream text, grey muted text, burgundy accents */
+  /* Palette: dark theme by default */
   --color-cream: #ece8e1;
   --color-brand: #0a080b;
   --color-hero: #000000;
@@ -13,18 +17,60 @@
   --color-menu: #000000;
   --color-burgundy: #800020;
   --color-burgundy-hover: #6d001b;
-  --color-muted: #A0A0A0;
+  --color-muted: #a0a0a0;
+  /* Text that always sits on the burgundy accent */
+  --color-on-accent: #f6f1e8;
+  /* Theme-aware hairlines and raised surfaces */
+  --color-hairline: rgba(236, 232, 225, 0.14);
+  --color-surface: rgba(236, 232, 225, 0.05);
+  /* The cream band used by Services, in both themes */
+  --color-panel: #ece8e1;
+  --color-panel-ink: #17140f;
 }
 
 @layer base {
+  :root {
+    --color-cream: #ece8e1;
+    --color-brand: #0a080b;
+    --color-hero: #000000;
+    --color-navbar: #000000;
+    --color-menu: #000000;
+    --color-burgundy: #800020;
+    --color-burgundy-hover: #6d001b;
+    --color-muted: #a0a0a0;
+    --color-on-accent: #f6f1e8;
+    --color-hairline: rgba(236, 232, 225, 0.14);
+    --color-surface: rgba(236, 232, 225, 0.05);
+    --color-panel: #ece8e1;
+    --color-panel-ink: #17140f;
+  }
+
+  .light {
+    --color-cream: #1b1814;
+    --color-brand: #fbf8f3;
+    --color-hero: #f3efe7;
+    --color-navbar: #f3efe7;
+    --color-menu: #fbf8f3;
+    --color-burgundy: #800020;
+    --color-burgundy-hover: #6d001b;
+    --color-muted: #5c564e;
+    --color-on-accent: #f7f3ec;
+    --color-hairline: rgba(27, 24, 20, 0.14);
+    --color-surface: rgba(27, 24, 20, 0.045);
+    --color-panel: #fffdf9;
+    --color-panel-ink: #1b1814;
+  }
+
   html {
+    background-color: var(--color-hero);
     scroll-behavior: smooth;
     /* keeps anchored sections clear of the fixed navbar */
     scroll-padding-top: 5rem;
   }
 
+  /* Transparent so the fixed parallax backdrop sits above the canvas */
   body {
-    background-color: var(--color-hero);
+    background-color: transparent;
     color: var(--color-cream);
     font-family: var(--font-body);
     overflow-x: hidden;
@@ -38,7 +84,7 @@
 
   ::selection {
     background-color: var(--color-burgundy);
-    color: var(--color-cream);
+    color: var(--color-on-accent);
   }
 }
 
@@ -92,3 +138,11 @@
   animation: marquee 30s linear infinite;
 }
 
+
+@theme {
+  --animate-rise: rise 0.9s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+  --animate-fade-in: fade-in 1s ease forwards;
+
+  @keyframes rise { to { transform: translateY(0); } }
+  @keyframes fade-in { to { opacity: 1; } }
+}

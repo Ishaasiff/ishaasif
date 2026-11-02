@@ -50,7 +50,7 @@ export function AboutPortrait() {
           className="absolute inset-0 translate-x-4 translate-y-4 rounded-t-[999px] rounded-b-3xl border-2 border-burgundy transition-transform duration-300 group-hover:translate-x-5 group-hover:translate-y-5 motion-reduce:transition-none"
         />
 
-        <div className="relative aspect-[4/5] overflow-hidden rounded-t-[999px] rounded-b-3xl bg-hero shadow-[0_20px_60px_-15px_rgba(128,0,32,0.7)]">
+        <div className="relative aspect-[4/5] overflow-hidden rounded-t-[999px] rounded-b-3xl bg-brand shadow-[0_20px_60px_-15px_rgba(128,0,32,0.7)] light:shadow-none">
           <Image
             src={avatarImage}
             alt="Isha Asif"

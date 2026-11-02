@@ -8,7 +8,7 @@ function Row({ filled }: { filled?: boolean }) {
       className={`flex items-center justify-between gap-6 text-[clamp(56px,13vw,200px)] leading-none ${
         filled
           ? "text-burgundy [-webkit-text-stroke:1.5px_#800020] [text-shadow:0_0_60px_rgba(128,0,32,0.8)]"
-          : "text-transparent [-webkit-text-stroke:1.5px_rgba(255,255,255,0.55)]"
+          : "text-transparent [-webkit-text-stroke:1.5px_var(--color-muted)]"
       }`}
     >
       <span className="font-display font-bold leading-[1.05] tracking-[-0.03em]">
@@ -19,7 +19,7 @@ function Row({ filled }: { filled?: boolean }) {
         aria-hidden="true"
         className="h-[0.6em] w-[0.6em] shrink-0 transition-transform duration-500 ease-out group-hover:-rotate-45 group-focus-visible:-rotate-45 motion-reduce:transition-none"
         fill="none"
-        stroke={filled ? "#800020" : "rgba(255,255,255,0.55)"}
+        stroke={filled ? "#800020" : "var(--color-muted)"}
         strokeWidth="1.2"
         strokeLinecap="round"
         strokeLinejoin="round"

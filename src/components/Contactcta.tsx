@@ -69,14 +69,14 @@ export function ContactCta({ href }: { href: string }) {
         {/* Soft halo */}
         <div
           aria-hidden="true"
-          className="absolute left-1/2 top-1/2 h-[150px] w-[150px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-burgundy/40 blur-[40px]"
+          className="absolute left-1/2 top-1/2 h-[150px] w-[150px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-burgundy/40 blur-[40px] light:hidden"
         />
 
         <a
           href={href}
           target="_blank"
           rel="noreferrer noopener"
-          className="group absolute left-1/2 top-1/2 flex h-[150px] w-[150px] -translate-x-1/2 -translate-y-1/2 flex-col items-center justify-center gap-2 rounded-full border-2 border-burgundy bg-burgundy font-display text-base font-semibold text-cream shadow-[0_0_30px_rgba(128,0,32,0.6)] transition-[background-color,box-shadow,scale] duration-300 hover:scale-105 hover:bg-burgundy-hover hover:shadow-[0_0_20px_rgba(128,0,32,0.8),0_0_50px_rgba(128,0,32,0.45)] focus-visible:scale-105 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white motion-reduce:transition-none"
+          className="group absolute left-1/2 top-1/2 flex h-[150px] w-[150px] -translate-x-1/2 -translate-y-1/2 flex-col items-center justify-center gap-2 rounded-full border-2 border-burgundy bg-burgundy font-display text-base font-semibold text-on-accent shadow-[0_0_30px_rgba(128,0,32,0.6)] transition-[background-color,box-shadow,scale] duration-300 hover:scale-105 hover:bg-burgundy-hover hover:shadow-[0_0_20px_rgba(128,0,32,0.8),0_0_50px_rgba(128,0,32,0.45)] focus-visible:scale-105 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-cream motion-reduce:transition-none"
         >
           Email me
           <svg

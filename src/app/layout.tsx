@@ -1,7 +1,9 @@
 import type { Metadata } from "next";
-import { Open_Sans, Poppins } from "next/font/google";
+import { Geist, Open_Sans, Poppins, Space_Grotesk } from "next/font/google";
 import type { ReactNode } from "react";
+import { FixedBackground } from "@/components/FixedBackground";
 import { TagCursor } from "@/components/TagCursor";
+import  Preloader  from "@/components/Preloader";
 import "./globals.css";
 
 const poppins = Poppins({
@@ -14,6 +16,18 @@ const poppins = Poppins({
 const openSans = Open_Sans({
   subsets: ["latin"],
   variable: "--font-open-sans",
+  display: "swap",
+});
+
+const geist = Geist({
+  subsets: ["latin"],
+  variable: "--font-geist",
+  display: "swap",
+});
+
+const spaceGrotesk = Space_Grotesk({
+  subsets: ["latin"],
+  variable: "--font-space-grotesk",
   display: "swap",
 });
 
@@ -55,13 +69,41 @@ export default function RootLayout({ children }: { children: ReactNode }) {
     <html
       lang="en"
       data-scroll-behavior="smooth"
-      className={`${poppins.variable} ${openSans.variable} h-full antialiased`}
+      className={`${poppins.variable} ${openSans.variable} ${geist.variable} ${spaceGrotesk.variable} h-full antialiased`}
+      suppressHydrationWarning
     >
+      <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              (function() {
+                try {
+                  var theme = localStorage.getItem('theme');
+                  if (theme === 'light') {
+                    document.documentElement.classList.add('light');
+                    document.documentElement.classList.remove('dark');
+                  } else {
+                    document.documentElement.classList.add('dark');
+                    document.documentElement.classList.remove('light');
+                    if (theme !== 'light') {
+                      localStorage.setItem('theme', 'dark');
+                    }
+                  }
+                } catch (e) {
+                  document.documentElement.classList.add('dark');
+                }
+              })();
+            `,
+          }}
+        />
+      </head>
       <body className="flex min-h-full flex-col">
+        <FixedBackground />
         <noscript>
           <style>{`.reveal{opacity:1 !important;transform:none !important}`}</style>
         </noscript>
         <TagCursor />
+        <Preloader />
         {children}
       </body>
     </html>
