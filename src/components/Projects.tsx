@@ -4,7 +4,7 @@ import { Reveal } from "@/components/Reveal";
 import { projects } from "@/data/projects";
 
 const intro =
-  "Recent work: a tutoring marketplace backend, a multi-tenant work management SaaS, an agency website and an AI study assistant.";
+  "A selection of recent work, from tutoring marketplace backends and multi-tenant SaaS platforms to agency websites and AI study assistants.";
 
 export const metadata: Metadata = {
   title: "Projects | Isha Asif",

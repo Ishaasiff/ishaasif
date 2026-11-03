@@ -119,16 +119,16 @@ export function TechStack() {
               </span>
             </div>
 
-            <div className="mt-6 grid gap-6 md:grid-cols-[1.2fr_0.8fr] md:items-end">
+            <div className="mt-6">
               <h2
                 id="tech-stack-heading"
                 className="font-heading text-[44px] font-extrabold leading-none tracking-[-0.04em] text-cream md:text-[54px]"
               >
                 My Tech <span className="text-burgundy">Stack.</span>
               </h2>
-              <p className="max-w-md font-body text-[17px] leading-relaxed text-muted">
-                A collection of technologies and tools I use to transform ideas
-                into functional, scalable and interactive digital experiences.
+              <p className="mt-4 max-w-xl font-body text-[17px] leading-relaxed text-muted">
+                A curated toolkit I rely on to turn ideas into functional,
+                scalable and interactive digital products.
               </p>
             </div>
 

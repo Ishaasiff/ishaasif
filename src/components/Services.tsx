@@ -69,17 +69,17 @@ export function Services() {
               </span>
             </div>
 
-            <div className="mt-6 grid gap-6 md:grid-cols-[1.2fr_0.8fr] md:items-end">
+            <div className="mt-6">
 
               <h2 className="font-heading text-[38px] font-extrabold leading-none tracking-[-0.04em] text-cream md:text-[54px]">
                 Turning ideas into{" "}
                 <span className="text-burgundy">reality.</span>
               </h2>
 
-              <p className="max-w-md font-body text-[17px] leading-relaxed text-muted">
-                I combine creativity and technical skills to build
-                digital experiences that look good, work smoothly,
-                and solve real problems.
+              <p className="mt-4 max-w-xl font-body text-[17px] leading-relaxed text-muted">
+                I combine creative vision with technical expertise to craft
+                digital experiences that look polished, perform reliably and
+                solve real problems.
               </p>
 
             </div>
